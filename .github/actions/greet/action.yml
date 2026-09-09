@@ -1,0 +1,34 @@
+name: Greet
+description: Greet a person and show the target environment
+
+inputs:
+  name:
+    description: Name of the person
+    required: true
+
+  env_name:
+    description: Environment name
+    required: false
+    default: dev
+
+outputs:
+  greeting:
+    description: Generated greeting
+    value: ${{ steps.make-greeting.outputs.greeting }}
+
+runs:
+  using: composite
+
+  steps:
+    - name: Show environment
+      shell: bash
+      run: |
+        echo "Running greeting action for environment: ${{ inputs.env_name }}"
+
+    - name: Make greeting
+      id: make-greeting
+      shell: bash
+      run: |
+        GREETING="Hello ${{ inputs.name }}, welcome to deboistech"
+        echo "$GREETING"
+        echo "greeting=$GREETING" >> "$GITHUB_OUTPUT"
